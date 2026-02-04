@@ -1,0 +1,144 @@
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  padding: 12px 30px;
+  background: rgba(13, 13, 13, 0.6);
+  backdrop-filter: blur(6px);
+  transition: background 0.3s;
+}
+
+.app-header.scrolled {
+  background: #0d0d0d;
+}
+
+.logo {
+  height: 40px;
+  cursor: pointer;
+}
+
+/* Search */
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #1f1f1f;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: box-shadow 0.2s;
+}
+
+.search-container:focus-within {
+  box-shadow: 0 0 0 2px #e50914;
+}
+
+.search-container input {
+  background: none;
+  border: none;
+  color: white;
+  outline: none;
+}
+
+/* Desktop nav */
+.desktop-nav ul {
+  display: flex;
+  gap: 22px;
+  list-style: none;
+}
+
+.desktop-nav a {
+  color: #e5e5e5;
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+}
+
+.desktop-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background: #e50914;
+  transition: width 0.3s;
+}
+
+.desktop-nav a:hover::after {
+  width: 100%;
+}
+
+/* Mobile icon */
+.menu-icon {
+  display: none;
+  margin-left: auto;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+/* Overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  z-index: 90;
+}
+
+.overlay.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Mobile nav */
+.mobile-nav {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 280px;
+  height: 100vh;
+  background: #141414;
+  padding: 30px 20px;
+  transition: right 0.35s ease;
+  z-index: 100;
+}
+
+.mobile-nav.open {
+  right: 0;
+}
+
+.close-icon {
+  font-size: 24px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.mobile-nav ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.mobile-nav a {
+  color: white;
+  font-size: 18px;
+  text-decoration: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .desktop-search,
+  .desktop-nav {
+    display: none;
+  }
+
+  .menu-icon {
+    display: block;
+  }
+}

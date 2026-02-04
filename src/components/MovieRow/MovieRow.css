@@ -1,0 +1,65 @@
+.movie-row {
+  margin: 25px 0;
+  padding-left: 30px;
+  position: relative;
+}
+
+.movie-row h2 {
+  color: white;
+  margin-bottom: 10px;
+}
+
+/* Wrapper pour positionner les flèches */
+.row-wrapper {
+  position: relative;
+}
+
+/* Scroll container */
+.row-posters {
+  display: flex;
+  gap: 12px;
+  overflow-x: scroll;
+  scroll-behavior: smooth;
+  padding-bottom: 10px;
+}
+
+.row-posters::-webkit-scrollbar {
+  display: none;
+}
+
+/* Boutons */
+.scroll-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(20, 20, 20, 0.7);
+  border: none;
+  color: white;
+  font-size: 26px;
+  width: 45px;
+  height: 80px;
+  cursor: pointer;
+  z-index: 20;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.scroll-btn.left {
+  left: 0;
+}
+
+.scroll-btn.right {
+  right: 0;
+}
+
+/* Apparition au hover */
+.row-wrapper:hover .scroll-btn {
+  opacity: 1;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .scroll-btn {
+    display: none;
+  }
+}

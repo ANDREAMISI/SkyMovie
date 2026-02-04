@@ -1,0 +1,50 @@
+.actors-hero {
+  position: relative;
+  height: 80vh;
+  overflow: hidden;
+  color: white;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  animation: zoomFade 4s ease-in-out infinite;
+  filter: brightness(0.55);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 120px 60px;
+  max-width: 600px;
+}
+
+.hero-content h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+@keyframes zoomFade {
+  0% {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+  15% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.15);
+  }
+}
