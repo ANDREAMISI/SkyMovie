@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { tmdb } from "../../services/tmdb";
 import "./MovieCard.css";
 
-function MovieCard({ movie }) {
+function MovieCard({ movie, onClick }) {
   const [trailerKey, setTrailerKey] = useState(null);
   const [showTrailer, setShowTrailer] = useState(false);
 
@@ -11,21 +11,23 @@ function MovieCard({ movie }) {
 
     const res = await tmdb.get(`/movie/${movie.id}/videos`);
     const trailer = res.data.results.find(
-      vid => vid.type === "Trailer" && vid.site === "YouTube"
+      (vid) => vid.type === "Trailer" && vid.site === "YouTube"
     );
+
     if (trailer) setTrailerKey(trailer.key);
   };
 
   return (
     <div
       className="movie-card"
+      onClick={onClick}
       onMouseEnter={() => {
         fetchTrailer();
         setShowTrailer(true);
       }}
       onMouseLeave={() => setShowTrailer(false)}
     >
-      {!showTrailer && (
+      {!showTrailer && movie.poster_path && (
         <img
           src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
           alt={movie.title}

@@ -7,18 +7,27 @@ function MovieModal({ movie, onClose }) {
   const [trailer, setTrailer] = useState(null);
 
   useEffect(() => {
-    tmdb.get(`/movie/${movie.id}`).then(res => setDetails(res.data));
-    tmdb.get(`/movie/${movie.id}/videos`).then(res => {
-      const vid = res.data.results.find(v => v.type === "Trailer");
+    if (!movie) return;
+
+    const fetchData = async () => {
+      const detailsRes = await tmdb.get(`/movie/${movie.id}`);
+      setDetails(detailsRes.data);
+
+      const videoRes = await tmdb.get(`/movie/${movie.id}/videos`);
+      const vid = videoRes.data.results.find(
+        (v) => v.type === "Trailer" && v.site === "YouTube"
+      );
       setTrailer(vid?.key);
-    });
-  }, [movie.id]);
+    };
+
+    fetchData();
+  }, [movie]);
 
   if (!details) return null;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal" onClick={e => e.stopPropagation()}>
+      <div className="modal" onClick={(e) => e.stopPropagation()}>
         <h1>{details.title}</h1>
         <p>{details.overview}</p>
         <p>⭐ {details.vote_average}</p>
@@ -27,6 +36,7 @@ function MovieModal({ movie, onClose }) {
           <iframe
             src={`https://www.youtube.com/embed/${trailer}`}
             title="Trailer"
+            allowFullScreen
           />
         )}
       </div>

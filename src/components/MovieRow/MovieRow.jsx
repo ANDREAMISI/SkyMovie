@@ -4,7 +4,7 @@ import MovieCard from "../MovieCard/MovieCard";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import "./MovieRow.css";
 
-function MovieRow({ title, fetchUrl, movies = [] }) {
+function MovieRow({ title, fetchUrl, movies, onSelectMovie }) {
   const [rowMovies, setRowMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -15,22 +15,18 @@ function MovieRow({ title, fetchUrl, movies = [] }) {
     let isMounted = true;
 
     const loadMovies = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
+      setIsLoading(true);
+      setError(null);
 
-        //films passés depuis le parent (search)
-        if (Array.isArray(movies) && movies.length > 0) {
+      try {
+        if (Array.isArray(movies)) {
           if (isMounted) setRowMovies(movies);
           return;
         }
 
-        //films depuis TMDB (catégories)
         if (fetchUrl && requests[fetchUrl]) {
           const res = await tmdb.get(requests[fetchUrl]);
-          if (isMounted) {
-            setRowMovies(res.data.results || []);
-          }
+          if (isMounted) setRowMovies(res.data.results || []);
         }
       } catch (err) {
         console.error(err);
@@ -41,25 +37,16 @@ function MovieRow({ title, fetchUrl, movies = [] }) {
     };
 
     loadMovies();
+    return () => (isMounted = false);
+  }, [fetchUrl, movies]);
 
-    return () => {
-      isMounted = false;
-    };
-  }, [movies, fetchUrl]);
-
-  //Scroll horizontal
   const scroll = (direction) => {
-    if (!rowRef.current) return;
-
-    const scrollAmount = direction === "left" ? -500 : 500;
-
-    rowRef.current.scrollBy({
-      left: scrollAmount,
+    rowRef.current?.scrollBy({
+      left: direction === "left" ? -500 : 500,
       behavior: "smooth",
     });
   };
 
-  //Rien à afficher
   if (!rowMovies.length && !isLoading) return null;
 
   return (
@@ -70,26 +57,21 @@ function MovieRow({ title, fetchUrl, movies = [] }) {
       {error && <p className="error">{error}</p>}
 
       <div className="row-wrapper">
-        {/*Bouton gauche */}
-        <button
-          className="scroll-btn left"
-          onClick={() => scroll("left")}
-        >
+        <button className="scroll-btn left" onClick={() => scroll("left")}>
           <FaChevronLeft />
         </button>
 
-        {/*Films */}
         <div className="row-posters" ref={rowRef}>
           {rowMovies.map((movie) => (
-            <MovieCard key={movie.id} movie={movie} />
+            <MovieCard
+              key={movie.id}
+              movie={movie}
+              onClick={() => onSelectMovie(movie)}
+            />
           ))}
         </div>
 
-        {/* Bouton droit */}
-        <button
-          className="scroll-btn right"
-          onClick={() => scroll("right")}
-        >
+        <button className="scroll-btn right" onClick={() => scroll("right")}>
           <FaChevronRight />
         </button>
       </div>

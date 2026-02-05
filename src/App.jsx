@@ -1,59 +1,54 @@
 import "./App.css";
 import Header from "./components/Header/Header";
-import MovieRow from "./components/MovieRow/MovieRow";
-import ActorsHero from "./components/ActorsHero/ActorsHero";
-import React, { useState, useEffect } from "react";
-import { tmdb } from "./services/tmdb";
+import MovieModal from "./components/MovieModal/MovieModal";
+import React, { useState } from "react";
+import { Routes, Route } from "react-router";
+
+import Home from "./pages/Home";
+import Movies from "./pages/Movies";
+import TVShows from "./pages/TVShows";
+import People from "./pages/People";
 
 function App() {
   const [search, setSearch] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (!search) {
-      setSearchResults([]);
-      return;
-    }
-
-    const fetchSearch = async () => {
-      setLoading(true);
-      try {
-        const res = await tmdb.get("/search/movie", {
-          params: { query: search }
-        });
-        setSearchResults(res.data.results);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSearch();
-  }, [search]);
+  const [selectedMovie, setSelectedMovie] = useState(null);
 
   return (
     <>
       <Header setSearch={setSearch} />
-      <ActorsHero />
 
-      {/* Recherche active */}
-      {search && (
-        <MovieRow
-          title={`Results for "${search}"`}
-          movies={searchResults}
-          loading={loading}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Home
+              search={search}
+              onSelectMovie={setSelectedMovie}
+            />
+          }
         />
-      )}
 
-      {/* Navigation normale */}
-      {!search && (
-        <>
-          <MovieRow title="Popular Movies" fetchUrl="popular" />
-          <MovieRow title="Top Rated" fetchUrl="topRated" />
-          <MovieRow title="Upcoming" fetchUrl="upcoming" />
-        </>
+        <Route
+          path="/movies"
+          element={<Movies onSelectMovie={setSelectedMovie} />}
+        />
+
+        <Route
+          path="/tv"
+          element={<TVShows />}
+        />
+
+        <Route
+          path="/people"
+          element={<People />}
+        />
+      </Routes>
+
+      {selectedMovie && (
+        <MovieModal
+          movie={selectedMovie}
+          onClose={() => setSelectedMovie(null)}
+        />
       )}
     </>
   );

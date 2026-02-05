@@ -37,7 +37,7 @@ function ActorsHero() {
 
       <div className="hero-content">
         <h1>{actor.name}</h1>
-        <p>Popularité : ⭐ {actor.popularity.toFixed(1)}</p>
+        <p>Popularité : ⭐ {actor.popularity.toFixed(1)}</p> 
       </div>
     </section>
   );

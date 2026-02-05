@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Header.css";
 import logo from "../../assets/react.svg";
 import { FaSearch, FaBars, FaTimes } from "react-icons/fa";
+import { Link } from "react-router"; // ✅ AJOUT ROUTER
 
 function Header({ setSearch }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -56,11 +57,15 @@ function Header({ setSearch }) {
         {/* Desktop nav */}
         <nav className="desktop-nav">
           <ul>
-            {["Home", "Movies", "TV Shows", "People"].map(item => (
-              <li key={item}>
-                <a href={`#${item.toLowerCase().replace(" ", "")}`}>
-                  {item}
-                </a>
+            {[
+              { name: "Home", path: "/" },
+              { name: "Movies", path: "/movies" },
+              { name: "TV Shows", path: "/tv" },
+              { name: "People", path: "/people" },
+            ].map((item) => (
+              <li key={item.name}>
+                {/* ✅ ROUTER LINK */}
+                <Link to={item.path}>{item.name}</Link>
               </li>
             ))}
           </ul>
@@ -80,7 +85,10 @@ function Header({ setSearch }) {
 
       {/* Mobile nav */}
       <nav className={`mobile-nav ${menuOpen ? "open" : ""}`}>
-        <FaTimes className="close-icon" onClick={() => setMenuOpen(false)} />
+        <FaTimes
+          className="close-icon"
+          onClick={() => setMenuOpen(false)}
+        />
 
         {/* Mobile search */}
         <div className="search-container mobile-search">
@@ -94,14 +102,20 @@ function Header({ setSearch }) {
         </div>
 
         <ul>
-          {["Home", "Movies", "TV Shows", "People"].map(item => (
-            <li key={item}>
-              <a
-                href={`#${item.toLowerCase().replace(" ", "")}`}
+          {[
+            { name: "Home", path: "/" },
+            { name: "Movies", path: "/movies" },
+            { name: "TV Shows", path: "/tv" },
+            { name: "People", path: "/people" },
+          ].map((item) => (
+            <li key={item.name}>
+              {/* ✅ ROUTER LINK + close menu */}
+              <Link
+                to={item.path}
                 onClick={() => setMenuOpen(false)}
               >
-                {item}
-              </a>
+                {item.name}
+              </Link>
             </li>
           ))}
         </ul>
